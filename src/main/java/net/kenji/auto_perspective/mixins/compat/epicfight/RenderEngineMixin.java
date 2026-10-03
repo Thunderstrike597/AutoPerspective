@@ -1,6 +1,6 @@
-package net.kenji.first_person_auto_switch.mixins.compat.epicfight;
+package net.kenji.auto_perspective.mixins.compat.epicfight;
 
-import net.kenji.first_person_auto_switch.PerspectiveManager;
+import net.kenji.auto_perspective.PerspectiveManager;
 import net.minecraftforge.client.event.RenderHandEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,17 +1,17 @@
-package net.kenji.first_person_auto_switch.compat;
+package net.kenji.auto_perspective.compat;
 
 import net.minecraft.client.Minecraft;
 import nl.requios.effortlessbuilding.EffortlessBuildingClient;
-import sophisticated.building.SophisticatedBuildingClient;
-import sophisticated.building.systems.BuilderChain;
+import nl.requios.effortlessbuilding.systems.BuilderChain;
 
-public class SophistocatedBuildingCompat {
+public class EffortlessBuildingCompat {
 
     public static boolean isInBuildingMode(Minecraft mc){
-        BuilderChain.BuildingState buildingState = SophisticatedBuildingClient.BUILDER_CHAIN.getBuildingState();
+        BuilderChain.BuildingState buildingState = EffortlessBuildingClient.BUILDER_CHAIN.getBuildingState();
         if(buildingState == BuilderChain.BuildingState.PLACING || buildingState == BuilderChain.BuildingState.BREAKING){
             return true;
         }
+
         return false;
     }
 

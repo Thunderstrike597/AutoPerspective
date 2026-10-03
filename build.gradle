@@ -28,7 +28,7 @@ base {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    toolchain.languageVersion = JavaLanguageVersion.of(language_version)
 }
 
 minecraft {
@@ -239,7 +239,7 @@ java {
 
 // -------------------- Dev Jar (DEOBF) --------------------
 tasks.named('jar', Jar).configure {
-    archiveBaseName = "FirstPersonAutoSwitcher"
+    archiveBaseName = jar_base_name
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes([

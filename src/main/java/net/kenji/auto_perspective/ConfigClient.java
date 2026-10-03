@@ -1,9 +1,6 @@
-package net.kenji.first_person_auto_switch;
+package net.kenji.auto_perspective;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConfigClient {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -87,12 +84,12 @@ public class ConfigClient {
                             "(<For When The Cause Of Switch Is Due To 'Block Mining'>) The Amount Of Ticks To Re-Check Before Auto-Switching Back to 3rd Person (Or 2nd Person)")
                     .define(
                             "Mining Exit Ticks",
-                            20);
+                            30);
             BUILDING_EXIT_TICKS = BUILDER.comment(
                             "(<For When The Cause Of Switch Is Due To 'Building/Build Mode' - For Effortless Building Compat>) The Amount Of Ticks To Re-Check Before Auto-Switching Back to 3rd Person (Or 2nd Person)")
                     .define(
                             "Building Exit Ticks",
-                            40);
+                            55);
             BUILDER.pop();
         BUILDER.pop();
         BUILDER.push("Compat Values");

@@ -1,8 +1,8 @@
-package net.kenji.first_person_auto_switch;
+package net.kenji.auto_perspective;
 
-import net.kenji.first_person_auto_switch.api.SwitchCauseType;
-import net.kenji.first_person_auto_switch.compat.EffortlessBuildingCompat;
-import net.kenji.first_person_auto_switch.compat.SophistocatedBuildingCompat;
+import net.kenji.auto_perspective.api.SwitchCauseType;
+import net.kenji.auto_perspective.compat.EffortlessBuildingCompat;
+import net.kenji.auto_perspective.compat.SophistocatedBuildingCompat;
 import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;

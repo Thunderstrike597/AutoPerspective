@@ -1,12 +1,10 @@
-package net.kenji.first_person_auto_switch.compat;
+package net.kenji.auto_perspective.compat;
 
-import net.kenji.first_person_auto_switch.PerspectiveManager;
+import net.kenji.auto_perspective.PerspectiveManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.SwordItem;
-import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 

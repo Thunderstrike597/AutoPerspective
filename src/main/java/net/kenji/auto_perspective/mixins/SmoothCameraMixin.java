@@ -1,9 +1,9 @@
-package net.kenji.first_person_auto_switch.mixins;
+package net.kenji.auto_perspective.mixins;
 
 import net.countered.smoothf5.SmoothF5ConfigState;
 import net.countered.smoothf5.mixin.CameraAccessor;
-import net.kenji.first_person_auto_switch.PerspectiveManager;
-import net.kenji.first_person_auto_switch.api.SmoothCamera;
+import net.kenji.auto_perspective.PerspectiveManager;
+import net.kenji.auto_perspective.api.SmoothCamera;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;

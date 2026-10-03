@@ -1,7 +1,6 @@
-package net.kenji.first_person_auto_switch.api;
+package net.kenji.auto_perspective.api;
 
-import net.kenji.first_person_auto_switch.ConfigClient;
-import net.minecraft.client.Minecraft;
+import net.kenji.auto_perspective.ConfigClient;
 
 public enum SwitchCauseType {
     NONE,

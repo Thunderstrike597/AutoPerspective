@@ -1,7 +1,7 @@
-package net.kenji.first_person_auto_switch.mixins;
+package net.kenji.auto_perspective.mixins;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.kenji.first_person_auto_switch.api.SmoothCamera;
+import net.kenji.auto_perspective.api.SmoothCamera;
 import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yesman.epicfight.api.client.camera.EpicFightCameraAPI;
 
 @Mixin(GameRenderer.class)
 public abstract class SmoothF5GameRendererMixin {

@@ -1,4 +1,4 @@
-package net.kenji.first_person_auto_switch.api;
+package net.kenji.auto_perspective.api;
 
 // New: duck interface
 public interface SmoothCamera {
