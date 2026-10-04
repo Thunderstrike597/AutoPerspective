@@ -43,6 +43,7 @@ public class PerspectiveManager extends CompatManager{
 
     private static boolean blockMiningSwitch = false;
     private static boolean renderFirstPersonHand;
+    private static int switchCooldown = 0;
 
     public static void setRenderFirstPersonHand(boolean value) {
         renderFirstPersonHand = value;}
@@ -53,9 +54,7 @@ public class PerspectiveManager extends CompatManager{
     public static void setBlockMiningTimerSwitch(boolean v){
         blockMiningSwitch = v;
     }
-    public static boolean getBlockMiningSwitch(){
-        return blockMiningSwitch;
-    }
+
 
     public static class PerspectiveSwitchData{
         private final CameraType previous;  // non-null = this mod currently owns the switch
@@ -89,6 +88,11 @@ public class PerspectiveManager extends CompatManager{
             reset();
             return;
         }
+        if(switchCooldown > 0 && ConfigClient.USE_SWITCH_COOLDOWN.get()){
+            switchCooldown--;
+            return;
+        }
+
         CameraType cam = mc.options.getCameraType();
         SwitchCauseType switchCauseType = getObstruction(mc, player, cam);
         if (switchCauseType != SwitchCauseType.NONE) {
@@ -111,7 +115,7 @@ public class PerspectiveManager extends CompatManager{
                 switchData = switchData.from(switchCauseType);
                 syncPlayerRotationToCamera(mc, player, cam);
                 mc.options.setCameraType(CameraType.FIRST_PERSON);
-
+                switchCooldown = ConfigClient.SWITCH_COOLDOWN_TICKS.get();
             }
         } else {
             // Active: we switched to first person
@@ -124,6 +128,7 @@ public class PerspectiveManager extends CompatManager{
             if (ticksClear >= switchData.lastSwitchCauseType.getExitTicksFromSwitchType()) {
                 mc.options.setCameraType(switchData.previous);
                 switchData = switchData.reset();
+                switchCooldown = ConfigClient.SWITCH_COOLDOWN_TICKS.get();
             }
         }
     }
@@ -163,6 +168,8 @@ public class PerspectiveManager extends CompatManager{
 
 
     private static SwitchCauseType getObstruction(Minecraft mc, Player player, CameraType cam) {
+        if(ConfigClient.DISABLE_AUTO_SWITCH.get())return SwitchCauseType.NONE;
+
         CameraType ref = switchData.previous != null ? switchData.previous : cam;
         if (ref.isFirstPerson()) return SwitchCauseType.NONE;
         boolean isMiningBlock = isMiningBlock(mc);
@@ -182,14 +189,16 @@ public class PerspectiveManager extends CompatManager{
         }
 
         double clear = clearCameraDistance(mc, player, eye, back);
-        if (clear / THIRD_PERSON_DIST < (switchData.previous != null ? EXIT_RATIO : ENTER_RATIO)) return SwitchCauseType.VIEW_OBSTRUCTED;
+        if(ConfigClient.USE_CAMERA_OBSTRUCTION_DETECTION.get())
+            if (clear / ConfigClient.MIN_CAMERA_OBSTRUCTION_DIST.get() < (switchData.previous != null ? EXIT_RATIO : ENTER_RATIO))
+                return SwitchCauseType.VIEW_OBSTRUCTED;
 
         // Where the third-person camera would be right now
         Vec3 camPos = eye.add(back.scale(clear));
         if (targetHiddenByBody(mc, player, eye, camPos)) return SwitchCauseType.VIEW_OBSTRUCTED;
 
         BlockPos eyePos = BlockPos.containing(eye);
-        return room.get(mc.level, eyePos).enclosed() ? SwitchCauseType.CLOSED_SPACE : SwitchCauseType.NONE;
+        return room.get(mc.level, eyePos).enclosed() && ConfigClient.USE_SMALL_SPACE_CHECK.get() ? SwitchCauseType.CLOSED_SPACE : SwitchCauseType.NONE;
     }
 
     private static boolean isUnderCeiling(Minecraft mc, Player player, Vec3 eye) {

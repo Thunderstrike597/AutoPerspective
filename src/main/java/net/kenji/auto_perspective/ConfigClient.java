@@ -7,11 +7,19 @@ public class ConfigClient {
     public static final ForgeConfigSpec SPEC;
 
     public static ForgeConfigSpec.ConfigValue<Boolean> USE_ROTATION_FIX;
+
+    public static ForgeConfigSpec.ConfigValue<Boolean> DISABLE_AUTO_SWITCH;
+    public static ForgeConfigSpec.ConfigValue<Boolean> USE_SWITCH_COOLDOWN;
+
+    public static ForgeConfigSpec.ConfigValue<Boolean> USE_CAMERA_OBSTRUCTION_DETECTION;
+    public static ForgeConfigSpec.ConfigValue<Boolean> USE_SMALL_SPACE_CHECK;
     public static ForgeConfigSpec.ConfigValue<Boolean> USE_CEILING_CHECK;
     public static ForgeConfigSpec.ConfigValue<Boolean> USE_MINING_TIMER;
-
     public static ForgeConfigSpec.ConfigValue<Boolean> USE_EFFORTLESS_BUILDING_MODE;
 
+    public static ForgeConfigSpec.ConfigValue<Double> MIN_CAMERA_OBSTRUCTION_DIST;
+
+    public static ForgeConfigSpec.ConfigValue<Integer> SWITCH_COOLDOWN_TICKS;
 
     public static ForgeConfigSpec.ConfigValue<Integer> MAX_CEILING_CHECK_DIST;
 
@@ -32,18 +40,54 @@ public class ConfigClient {
 
 
     static {
+        DISABLE_AUTO_SWITCH = BUILDER.comment(
+                        "An Option To Disable All Auto Switching Checks! Why tho?")
+                .define(
+                        "Disable Auto-Switch",
+                        false);
+
+
+        BUILDER.push("Check Usage");
+
+        USE_SWITCH_COOLDOWN = BUILDER.comment(
+                        "Whether Or Not There Should Be A Cooldown For The Auto-Switch")
+                .define(
+                        "Use Switch Cooldown",
+                        true);
+        USE_CAMERA_OBSTRUCTION_DETECTION = BUILDER.comment(
+                        "Whether Or Not The Player Being Too Close To The Camera Should Contribute To The Auto-Switch Check")
+                .define(
+                        "Use Camera Obstruction Check",
+                        true);
+        USE_SMALL_SPACE_CHECK = BUILDER.comment(
+                        "Whether Or Not Being In Small Spaces Or Rooms Should Contribute To The Auto-Switch Check")
+                .define(
+                        "Use Small Space Check",
+                        true);
+        USE_CEILING_CHECK = BUILDER.comment(
+                        "Whether Or Not Blocks Above The Player At Or Above <Max Ceiling Check Distance> Should Contribute To The Auto-Switch Check \n('<Max Ceiling Check Distance>' Refers To The Config Option 'Max Ceiling Check Distance')")
+                .define(
+                        "Use Ceiling Check",
+                        true);
+        USE_MINING_TIMER = BUILDER.comment(
+                        "Whether Or Not Mining Blocks Continuously For Longer Than <Max Mining Time> Should Contribute To The Auto-Switch Check \n('<Max Mining Time>' Refers To The Config Option 'Max Mining Time')")
+                .define(
+                        "Use Mining Timer",
+                        true);
+
+        BUILDER.pop();
         BUILDER.push("Values");
 
-        USE_CEILING_CHECK = BUILDER.comment(
-                "Whether Or Not Blocks Above The Player At Or Above <Max Ceiling Check Distance> Should Contribute To The Auto-Switch Check \n('<Max Ceiling Check Distance>' Refers To The Config Option 'Max Ceiling Check Distance')")
+        SWITCH_COOLDOWN_TICKS = BUILDER.comment(
+                        "The Number Of Ticks Cooldown Should Have For The 'Use Switch Cooldown' Config Option")
                 .define(
-                "Use Ceiling Check",
-                true);
-        USE_MINING_TIMER = BUILDER.comment(
-                "Whether Or Not Mining Blocks Continuously For Longer Than <Max Mining Time> Should Contribute To The Auto-Switch Check \n('<Max Mining Time>' Refers To The Config Option 'Max Mining Time')")
+                        "Switch Cooldown Ticks",
+                        12);
+        MIN_CAMERA_OBSTRUCTION_DIST = BUILDER.comment(
+                        "The Distance From The Player The Camera Should Be Before Switching To First Person For The Config Option 'Use Camera Obstruction Check'")
                 .define(
-                "Use Mining Timer",
-                true);
+                        "Min Camera Obstruction Check Distance",
+                        4.0);
         MAX_CEILING_CHECK_DIST = BUILDER.comment(
                 "The Distance To Check For Blocks Above The Player For The Config Option 'Use Ceiling Check'")
                 .define(
