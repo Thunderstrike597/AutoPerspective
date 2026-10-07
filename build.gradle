@@ -277,7 +277,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'net.kenji'
-            artifactId = 'epic-colonies-efm-20-14-4'
+            artifactId = "${maven_local_name}"
             version = '1.4.0'
 
 
