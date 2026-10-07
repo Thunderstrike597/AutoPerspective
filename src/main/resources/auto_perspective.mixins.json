@@ -2,8 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.kenji.auto_perspective.mixins",
-  "compatibilityLevel": "JAVA_8",
-  "refmap": "auto_perspective.refmap.json",
+  "compatibilityLevel": "JAVA_21",
   "plugin": "net.kenji.auto_perspective.CompatMixinPlugin",
   "mixins": [
     "SmoothCameraMixin",

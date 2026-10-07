@@ -1,42 +1,43 @@
 package net.kenji.auto_perspective;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ConfigClient {
-    public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    public static final ModConfigSpec SPEC;
 
-    public static ForgeConfigSpec.ConfigValue<Boolean> USE_ROTATION_FIX;
+    public static ModConfigSpec.ConfigValue<Boolean> USE_ROTATION_FIX;
 
-    public static ForgeConfigSpec.ConfigValue<Boolean> DISABLE_AUTO_SWITCH;
-    public static ForgeConfigSpec.ConfigValue<Boolean> USE_SWITCH_COOLDOWN;
+    public static ModConfigSpec.ConfigValue<Boolean> DISABLE_AUTO_SWITCH;
+    public static ModConfigSpec.ConfigValue<Boolean> USE_SWITCH_COOLDOWN;
 
-    public static ForgeConfigSpec.ConfigValue<Boolean> USE_CAMERA_OBSTRUCTION_DETECTION;
-    public static ForgeConfigSpec.ConfigValue<Boolean> USE_SMALL_SPACE_CHECK;
-    public static ForgeConfigSpec.ConfigValue<Boolean> USE_CEILING_CHECK;
-    public static ForgeConfigSpec.ConfigValue<Boolean> USE_MINING_TIMER;
-    public static ForgeConfigSpec.ConfigValue<Boolean> USE_EFFORTLESS_BUILDING_MODE;
+    public static ModConfigSpec.ConfigValue<Boolean> USE_CAMERA_OBSTRUCTION_DETECTION;
+    public static ModConfigSpec.ConfigValue<Boolean> USE_SMALL_SPACE_CHECK;
+    public static ModConfigSpec.ConfigValue<Boolean> USE_CEILING_CHECK;
+    public static ModConfigSpec.ConfigValue<Boolean> USE_MINING_TIMER;
+    public static ModConfigSpec.ConfigValue<Boolean> USE_EFFORTLESS_BUILDING_MODE;
 
-    public static ForgeConfigSpec.ConfigValue<Double> MIN_CAMERA_OBSTRUCTION_DIST;
+    public static ModConfigSpec.ConfigValue<Double> MIN_CAMERA_OBSTRUCTION_DIST;
 
-    public static ForgeConfigSpec.ConfigValue<Integer> SWITCH_COOLDOWN_TICKS;
+    public static ModConfigSpec.ConfigValue<Integer> SWITCH_COOLDOWN_TICKS;
 
-    public static ForgeConfigSpec.ConfigValue<Integer> MAX_CEILING_CHECK_DIST;
+    public static ModConfigSpec.ConfigValue<Integer> MAX_CEILING_CHECK_DIST;
 
-    public static ForgeConfigSpec.ConfigValue<Integer> MAX_CHECK_BLOCKS;
-    public static ForgeConfigSpec.ConfigValue<Integer> MAX_CHECK_RADIUS;
-    public static ForgeConfigSpec.ConfigValue<Integer> CHECK_TICKS;
+    public static ModConfigSpec.ConfigValue<Integer> MAX_CHECK_BLOCKS;
+    public static ModConfigSpec.ConfigValue<Integer> MAX_CHECK_RADIUS;
+    public static ModConfigSpec.ConfigValue<Integer> CHECK_TICKS;
 
-    public static ForgeConfigSpec.ConfigValue<Integer> ENTER_TICKS;
+    public static ModConfigSpec.ConfigValue<Integer> ENTER_TICKS;
 
-    public static ForgeConfigSpec.ConfigValue<Integer> ENCLOSED_EXIT_TICKS;
-    public static ForgeConfigSpec.ConfigValue<Integer> OBSTRUCTED_EXIT_TICKS;
-    public static ForgeConfigSpec.ConfigValue<Integer> MINING_EXIT_TICKS;
-    public static ForgeConfigSpec.ConfigValue<Integer> BUILDING_EXIT_TICKS;
+    public static ModConfigSpec.ConfigValue<Integer> ENCLOSED_EXIT_TICKS;
+    public static ModConfigSpec.ConfigValue<Integer> OBSTRUCTED_EXIT_TICKS;
+    public static ModConfigSpec.ConfigValue<Integer> MINING_EXIT_TICKS;
+    public static ModConfigSpec.ConfigValue<Integer> BUILDING_EXIT_TICKS;
 
 
 
-    public static ForgeConfigSpec.ConfigValue<Integer> MAX_MINING_TIMER;
+    public static ModConfigSpec.ConfigValue<Integer> MAX_MINING_TIMER;
 
 
     static {

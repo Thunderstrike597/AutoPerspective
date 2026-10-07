@@ -1,22 +1,24 @@
 package net.kenji.auto_perspective.events;
 
-import net.kenji.auto_perspective.CompatManager;
 import net.kenji.auto_perspective.AutoPerspective;
+import net.kenji.auto_perspective.CompatManager;
 import net.kenji.auto_perspective.PerspectiveManager;
 import net.kenji.auto_perspective.compat.EpicFightCompat;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
+
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = AutoPerspective.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = AutoPerspective.MODID, value = Dist.CLIENT)
 public class ClientEvents extends CompatManager {
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(ClientTickEvent.Post event) {
         PerspectiveManager.tickPerspectiveManager(event);
 
         if(isEpicFightPresent()){
@@ -26,6 +28,6 @@ public class ClientEvents extends CompatManager {
     @SubscribeEvent
     public static void cancelHand(RenderHandEvent event){
         if(!PerspectiveManager.shouldRenderFirstPersonHand())
-            event.cancel();
+            event.setCanceled(true);
     }
 }

@@ -1,14 +1,17 @@
 package net.kenji.auto_perspective.compat;
 
+import fabric.nl.requios.effortlessbuilding.EffortlessBuildingClient;
+import neoforge.nl.requios.effortlessbuilding.buildpipeline.BuildPipeline;
+import neoforge.nl.requios.effortlessbuilding.buildpipeline.BuildPipelineClient;
 import net.minecraft.client.Minecraft;
-import nl.requios.effortlessbuilding.EffortlessBuildingClient;
-import nl.requios.effortlessbuilding.systems.BuilderChain;
+import sophisticated.building.systems.BuilderChain;
+
 
 public class EffortlessBuildingCompat {
 
     public static boolean isInBuildingMode(Minecraft mc){
-        BuilderChain.BuildingState buildingState = EffortlessBuildingClient.BUILDER_CHAIN.getBuildingState();
-        if(buildingState == BuilderChain.BuildingState.PLACING || buildingState == BuilderChain.BuildingState.BREAKING){
+        BuildPipeline.BuildState buildingState = BuildPipelineClient.getBuildState();
+        if(buildingState != null){
             return true;
         }
 

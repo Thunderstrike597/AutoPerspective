@@ -16,7 +16,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
+
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -76,8 +77,7 @@ public class PerspectiveManager extends CompatManager{
 
     }
 
-    public static void tickPerspectiveManager(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void tickPerspectiveManager(ClientTickEvent.Post event) {
         if(miningTimer == -1){
             miningTimer = ConfigClient.MAX_MINING_TIMER.get();
         }

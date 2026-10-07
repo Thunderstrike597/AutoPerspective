@@ -4,7 +4,7 @@ import net.kenji.auto_perspective.PerspectiveManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.SwordItem;
-import net.minecraftforge.event.TickEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
@@ -14,7 +14,7 @@ public class EpicFightCompat {
 
 
 
-    public static void tickEpicFightCompat(TickEvent.ClientTickEvent event){
+    public static void tickEpicFightCompat(ClientTickEvent.Post event){
         Minecraft mc = Minecraft.getInstance();
 
         Player player = mc.player;
