@@ -2,6 +2,7 @@ package net.kenji.auto_perspective;
 
 import net.kenji.auto_perspective.api.SwitchCauseType;
 import net.kenji.auto_perspective.compat.EffortlessBuildingCompat;
+import net.kenji.auto_perspective.compat.EpicFightCompat;
 import net.kenji.auto_perspective.compat.SophistocatedBuildingCompat;
 import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
@@ -18,6 +19,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -45,6 +47,7 @@ public class PerspectiveManager extends CompatManager{
     private static boolean blockMiningSwitch = false;
     private static boolean renderFirstPersonHand;
     private static int switchCooldown = 0;
+    private static int attackCounter = 0;
 
     public static void setRenderFirstPersonHand(boolean value) {
         renderFirstPersonHand = value;}
@@ -81,7 +84,9 @@ public class PerspectiveManager extends CompatManager{
         if(miningTimer == -1){
             miningTimer = ConfigClient.MAX_MINING_TIMER.get();
         }
-
+        if(attackCounter > 0) {
+            attackCounter--;
+        }
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null || mc.level == null) {
@@ -132,6 +137,12 @@ public class PerspectiveManager extends CompatManager{
             }
         }
     }
+
+    public static void onPlayerAttack(AttackEntityEvent event){
+        attackCounter = ConfigClient.ATTACKING_EXIT_TICKS.get();
+    }
+
+
     public static boolean isLookingAtBlock(Minecraft mc){
 
         if (mc.player != null) {
@@ -143,10 +154,11 @@ public class PerspectiveManager extends CompatManager{
     }
 
     public static boolean isBuildingMode(Minecraft mc){
-        if(isEffortlessBuildngPresent() && ConfigClient.USE_EFFORTLESS_BUILDING_MODE.get()){
-           return EffortlessBuildingCompat.isInBuildingMode(mc);
+        if(!ConfigClient.USE_EFFORTLESS_BUILDING_MODE.get())return false;
+        if(isEffortlessBuildngPresent()){
+            return EffortlessBuildingCompat.isInBuildingMode(mc);
         }
-        if(isSophistocatedBuildngPresent() && ConfigClient.USE_EFFORTLESS_BUILDING_MODE.get()){
+        if(isSophistocatedBuildngPresent()){
             return SophistocatedBuildingCompat.isInBuildingMode(mc);
         }
         return false;
@@ -154,6 +166,7 @@ public class PerspectiveManager extends CompatManager{
 
 
     public static boolean isMiningBlock(Minecraft mc){
+        if(!ConfigClient.USE_MINING_TIMER.get())return false;
         if(mc.gameMode != null) {
             if (mc.gameMode.isDestroying() || (!blockMiningSwitch && mc.options.keyAttack.isDown() && isLookingAtBlock(mc))){
                 if(miningTimer > 0)
@@ -163,10 +176,21 @@ public class PerspectiveManager extends CompatManager{
                 miningTimer = ConfigClient.MAX_MINING_TIMER.get();
             }
         }
-        return miningTimer <= 0 && ConfigClient.USE_MINING_TIMER.get();
+        return miningTimer <= 0;
     }
 
-
+    public static boolean isLockingOn(){
+        if(!ConfigClient.USE_EPICFIGHT_LOCKON_BLOCK.get())
+            return false;
+        if(isEpicFightPresent()){
+            return EpicFightCompat.getHasLockonTarget();
+        }
+        return false;
+    }
+    public static boolean isAttacking(){
+        if(!(ConfigClient.USE_ATTACK_SWITCH.get()))return false;
+        return attackCounter > 0;
+    }
     private static SwitchCauseType getObstruction(Minecraft mc, Player player, CameraType cam) {
         if(ConfigClient.DISABLE_AUTO_SWITCH.get())return SwitchCauseType.NONE;
 
@@ -174,7 +198,12 @@ public class PerspectiveManager extends CompatManager{
         if (ref.isFirstPerson()) return SwitchCauseType.NONE;
         boolean isMiningBlock = isMiningBlock(mc);
         boolean isBuildingMode = isBuildingMode(mc);
-
+        boolean isLockingOn = isLockingOn();
+        boolean isAttacking = isAttacking();
+        if(isLockingOn)
+            return SwitchCauseType.NONE;
+        if(isAttacking)
+            return SwitchCauseType.NONE;
         if(isMiningBlock)
             return SwitchCauseType.BLOCK_MINED;
         if(isBuildingMode)

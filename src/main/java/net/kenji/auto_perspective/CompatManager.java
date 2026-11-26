@@ -1,6 +1,15 @@
 package net.kenji.auto_perspective;
 
+import net.kenji.auto_perspective.compat.EpicFightCompat;
+
 public class CompatManager {
+
+    public static void initCompats(){
+        if(isEpicFightPresent()){
+            EpicFightCompat.init();
+        }
+    }
+
 
     protected static boolean isEpicFightPresent(){
         return AutoPerspective.isLoaded("epicfight");

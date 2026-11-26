@@ -30,7 +30,9 @@ public class AutoPerspective {
         IEventBus modEventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
 
         ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.CLIENT, ConfigClient.SPEC, "First Person Auto Switch-Client.toml");
-
+        CompatManager.initCompats();
     }
+
+
 
 }

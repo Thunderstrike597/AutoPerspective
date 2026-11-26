@@ -135,7 +135,7 @@ java {
 
 // -------------------- Jar --------------------
 tasks.named('jar', Jar).configure {
-    archiveBaseName = "${jar_base_name}-${epic_fight_version}"
+    archiveBaseName = "${jar_base_name}"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes(["Specification-Title"     : mod_id,
