@@ -2,6 +2,7 @@ package net.kenji.auto_perspective;
 
 import net.kenji.auto_perspective.api.SwitchCauseType;
 import net.kenji.auto_perspective.compat.EffortlessBuildingCompat;
+import net.kenji.auto_perspective.compat.EpicFightCompat;
 import net.kenji.auto_perspective.compat.SophistocatedBuildingCompat;
 import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
@@ -17,6 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -31,6 +33,7 @@ public class PerspectiveManager extends CompatManager{
     private static final double OCCLUDE_ENTER = 0.6;       // fraction of sample points hidden to trigger
     private static final double OCCLUDE_EXIT = 0.4;        // must drop below this to release (hysteresis)
 
+
     // Tighter than before; only catches genuinely tiny sealed spaces now
     private static final FloodFillRoomDetector room = new FloodFillRoomDetector();
     private static boolean suspended = false;   // player overrode us; wait until the area is clear
@@ -44,6 +47,8 @@ public class PerspectiveManager extends CompatManager{
     private static boolean blockMiningSwitch = false;
     private static boolean renderFirstPersonHand;
     private static int switchCooldown = 0;
+    private static int attackCounter = 0;
+
 
     public static void setRenderFirstPersonHand(boolean value) {
         renderFirstPersonHand = value;}
@@ -80,6 +85,9 @@ public class PerspectiveManager extends CompatManager{
         if (event.phase != TickEvent.Phase.END) return;
         if(miningTimer == -1){
             miningTimer = ConfigClient.MAX_MINING_TIMER.get();
+        }
+        if(attackCounter > 0) {
+            attackCounter--;
         }
 
         Minecraft mc = Minecraft.getInstance();
@@ -132,6 +140,12 @@ public class PerspectiveManager extends CompatManager{
             }
         }
     }
+
+    public static void onPlayerAttack(LivingAttackEvent event){
+        if(!(event.getSource().getEntity() instanceof Player player))return;
+        attackCounter = ConfigClient.ATTACKING_EXIT_TICKS.get();
+    }
+
     public static boolean isLookingAtBlock(Minecraft mc){
 
         if (mc.player != null) {
@@ -143,10 +157,11 @@ public class PerspectiveManager extends CompatManager{
     }
 
     public static boolean isBuildingMode(Minecraft mc){
-        if(isEffortlessBuildngPresent() && ConfigClient.USE_EFFORTLESS_BUILDING_MODE.get()){
+        if(!ConfigClient.USE_EFFORTLESS_BUILDING_MODE.get())return false;
+        if(isEffortlessBuildngPresent()){
            return EffortlessBuildingCompat.isInBuildingMode(mc);
         }
-        if(isSophistocatedBuildngPresent() && ConfigClient.USE_EFFORTLESS_BUILDING_MODE.get()){
+        if(isSophistocatedBuildngPresent()){
             return SophistocatedBuildingCompat.isInBuildingMode(mc);
         }
         return false;
@@ -154,6 +169,7 @@ public class PerspectiveManager extends CompatManager{
 
 
     public static boolean isMiningBlock(Minecraft mc){
+        if(!ConfigClient.USE_MINING_TIMER.get())return false;
         if(mc.gameMode != null) {
             if (mc.gameMode.isDestroying() || (!blockMiningSwitch && mc.options.keyAttack.isDown() && isLookingAtBlock(mc))){
                 if(miningTimer > 0)
@@ -163,8 +179,23 @@ public class PerspectiveManager extends CompatManager{
                 miningTimer = ConfigClient.MAX_MINING_TIMER.get();
             }
         }
-        return miningTimer <= 0 && ConfigClient.USE_MINING_TIMER.get();
+        return miningTimer <= 0;
     }
+
+    public static boolean isLockingOn(){
+        if(!ConfigClient.USE_EPICFIGHT_LOCKON_BLOCK.get())
+            return false;
+
+        if(isEpicFightPresent()){
+            return EpicFightCompat.getHasLockonTarget();
+        }
+        return false;
+    }
+    public static boolean isAttacking(){
+        if(!(ConfigClient.USE_ATTACK_SWITCH.get()))return false;
+        return attackCounter > 0;
+    }
+
 
 
     private static SwitchCauseType getObstruction(Minecraft mc, Player player, CameraType cam) {
@@ -174,11 +205,17 @@ public class PerspectiveManager extends CompatManager{
         if (ref.isFirstPerson()) return SwitchCauseType.NONE;
         boolean isMiningBlock = isMiningBlock(mc);
         boolean isBuildingMode = isBuildingMode(mc);
-
+        boolean isLockingOn = isLockingOn();
+        boolean isAttacking = isAttacking();
+        if(isLockingOn)
+            return SwitchCauseType.NONE;
+        if(isAttacking)
+            return SwitchCauseType.NONE;
         if(isMiningBlock)
             return SwitchCauseType.BLOCK_MINED;
         if(isBuildingMode)
             return SwitchCauseType.BUILD_MODE;
+
 
         Vec3 eye = player.getEyePosition();
         Vec3 look = player.getViewVector(1.0F);

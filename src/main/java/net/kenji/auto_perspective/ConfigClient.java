@@ -16,6 +16,8 @@ public class ConfigClient {
     public static ForgeConfigSpec.ConfigValue<Boolean> USE_CEILING_CHECK;
     public static ForgeConfigSpec.ConfigValue<Boolean> USE_MINING_TIMER;
     public static ForgeConfigSpec.ConfigValue<Boolean> USE_EFFORTLESS_BUILDING_MODE;
+    public static ForgeConfigSpec.ConfigValue<Boolean> USE_EPICFIGHT_LOCKON_BLOCK;
+    public static ForgeConfigSpec.ConfigValue<Boolean> USE_ATTACK_SWITCH;
 
     public static ForgeConfigSpec.ConfigValue<Double> MIN_CAMERA_OBSTRUCTION_DIST;
 
@@ -33,6 +35,7 @@ public class ConfigClient {
     public static ForgeConfigSpec.ConfigValue<Integer> OBSTRUCTED_EXIT_TICKS;
     public static ForgeConfigSpec.ConfigValue<Integer> MINING_EXIT_TICKS;
     public static ForgeConfigSpec.ConfigValue<Integer> BUILDING_EXIT_TICKS;
+    public static ForgeConfigSpec.ConfigValue<Integer> ATTACKING_EXIT_TICKS;
 
 
 
@@ -134,6 +137,11 @@ public class ConfigClient {
                     .define(
                             "Building Exit Ticks",
                             55);
+            ATTACKING_EXIT_TICKS = BUILDER.comment(
+                            "(<For When The Cause Of Switch Is Due To 'Player Attack'>) The Amount Of Ticks To Re-Check Before Auto-Switching Back to 1st Person After Attacking")
+                    .define(
+                            "Attacking Exit Ticks",
+                            75);
             BUILDER.pop();
         BUILDER.pop();
         BUILDER.push("Compat Values");
@@ -142,6 +150,16 @@ public class ConfigClient {
                 "Whether Effortless Building's, 'Build Mode' Should Force First Person Perspective")
                 .define("Use 'Effortless Building Mod' Build Mode",
                 true);
+        USE_EPICFIGHT_LOCKON_BLOCK = BUILDER.comment(
+                        "Whether Or Not EpicFight's Lockon Will Cause 3rd Person When Active")
+                .define(
+                        "Use Epic Fight LockOn Block",
+                        true);
+        USE_ATTACK_SWITCH = BUILDER.comment(
+                        "Whether Or Not Attacking Will Block Cause 3rd Person")
+                .define(
+                        "Use Attack Switch Block",
+                        true);
         BUILDER.pop();
 
         BUILDER.push("Fixes");

@@ -39,7 +39,7 @@ public class AutoPerspective {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        CompatManager.initCompats();
     }
 
     // Add the example block item to the building blocks tab
