@@ -11,6 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 
 
 @OnlyIn(Dist.CLIENT)
@@ -24,6 +25,11 @@ public class ClientEvents extends CompatManager {
         if(isEpicFightPresent()){
             EpicFightCompat.tickEpicFightCompat(event);
         }
+    }
+    @SubscribeEvent
+    public static void onLivingAttack(AttackEntityEvent event) {
+        PerspectiveManager.onPlayerAttack(event);
+
     }
     @SubscribeEvent
     public static void cancelHand(RenderHandEvent event){
