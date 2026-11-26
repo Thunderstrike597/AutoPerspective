@@ -26,12 +26,14 @@ import javax.annotation.Nullable;
 
 public class PerspectiveManager extends CompatManager{
 
+
     private static final double THIRD_PERSON_DIST = 4.0;  // vanilla; raise if you use a zoom mod
     private static final double ENTER_RATIO = 0.6;        // obstructed when clear distance < 60% of desired
     private static final double EXIT_RATIO = 0.85;        // clear again only when > 85% (hysteresis)
     private static final double OCCLUSION_MAX_DIST = 3.5;  // only care about targets this close to the eye
     private static final double OCCLUDE_ENTER = 0.6;       // fraction of sample points hidden to trigger
     private static final double OCCLUDE_EXIT = 0.4;        // must drop below this to release (hysteresis)
+    private static final int MAX_MINING_RESET_TIMER = 20;  // number of ticks required to reset the mining timer
 
 
     // Tighter than before; only catches genuinely tiny sealed spaces now
@@ -41,6 +43,7 @@ public class PerspectiveManager extends CompatManager{
     private static int ticksClear = 0;
 
     private static int miningTimer = -1;
+    private static int miningResetTimer = MAX_MINING_RESET_TIMER;
 
     private static PerspectiveSwitchData switchData = PerspectiveSwitchData.init();
 
@@ -174,9 +177,12 @@ public class PerspectiveManager extends CompatManager{
             if (mc.gameMode.isDestroying() || (!blockMiningSwitch && mc.options.keyAttack.isDown() && isLookingAtBlock(mc))){
                 if(miningTimer > 0)
                     miningTimer--;
+                miningResetTimer = MAX_MINING_RESET_TIMER;
             }
             else {
-                miningTimer = ConfigClient.MAX_MINING_TIMER.get();
+                miningResetTimer--;
+                if(miningResetTimer <= 0)
+                    miningTimer = ConfigClient.MAX_MINING_TIMER.get();
             }
         }
         return miningTimer <= 0;
