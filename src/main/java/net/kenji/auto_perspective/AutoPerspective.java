@@ -24,6 +24,20 @@ public class AutoPerspective {
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    public static boolean isClassPresent(String className) {
+        String path = className.replace('.', '/') + ".class";
+        ClassLoader[] loaders = {
+                CompatMixinPlugin.class.getClassLoader(),
+                Thread.currentThread().getContextClassLoader()
+        };
+        for (ClassLoader cl : loaders) {
+            if (cl != null && cl.getResource(path) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isLoaded(String modid) {
         return FMLLoader.getLoadingModList().getModFileById(modid) != null;
     }

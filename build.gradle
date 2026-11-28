@@ -189,6 +189,7 @@ dependencies {
 
 
     implementation fg.deobf("curse.maven:epic-fight-mod-405076:8049910")
+
     implementation fg.deobf("curse.maven:better-lock-on-1339577:8617157")
     implementation fg.deobf("curse.maven:seramicxs-smooth-f5-1531249:8130965")
 
@@ -199,6 +200,7 @@ dependencies {
     implementation fg.deobf("curse.maven:effortlessbuilding-sophisticated-1414718:8974418")
 
     implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:9547189")
+
 
     implementation fg.deobf("curse.maven:configured-457570:5180900")
 

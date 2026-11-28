@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,8 +28,14 @@ public class ClientEvents extends CompatManager {
     @SubscribeEvent
     public static void onLivingAttack(LivingAttackEvent event) {
         PerspectiveManager.onPlayerAttack(event);
-
     }
+    @SubscribeEvent
+    public static void onPlayerJoin(EntityJoinLevelEvent event) {
+        if(isEpicFightPresent()){
+            EpicFightCompat.onPlayerJoin(event);
+        }
+    }
+
     @SubscribeEvent
     public static void cancelHand(RenderHandEvent event){
         if(!PerspectiveManager.shouldRenderFirstPersonHand())

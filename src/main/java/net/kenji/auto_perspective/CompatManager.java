@@ -1,5 +1,7 @@
 package net.kenji.auto_perspective;
 
+import com.github.exopandora.shouldersurfing.ShoulderSurfingCommon;
+import com.github.exopandora.shouldersurfing.api.client.ShoulderSurfing;
 import net.kenji.auto_perspective.compat.EpicFightCompat;
 
 public class CompatManager {
@@ -23,5 +25,11 @@ public class CompatManager {
     protected static boolean isSophistocatedBuildngPresent(){
         return AutoPerspective.isLoaded("sophisticatedbuilding");
     }
+    protected static boolean isShoulderSurfingPresent(){
+        return AutoPerspective.isLoaded("shouldersurfing");
+    }
+
+
+
 
 }
