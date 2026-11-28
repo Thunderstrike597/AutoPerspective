@@ -23,5 +23,7 @@ public class CompatManager {
     protected static boolean isSophistocatedBuildngPresent(){
         return AutoPerspective.isLoaded("sophisticatedbuilding");
     }
-
+    protected static boolean isShoulderSurfingPresent(){
+        return AutoPerspective.isLoaded("shouldersurfing");
+    }
 }

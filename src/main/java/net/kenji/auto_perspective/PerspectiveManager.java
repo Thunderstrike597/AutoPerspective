@@ -3,6 +3,7 @@ package net.kenji.auto_perspective;
 import net.kenji.auto_perspective.api.SwitchCauseType;
 import net.kenji.auto_perspective.compat.EffortlessBuildingCompat;
 import net.kenji.auto_perspective.compat.EpicFightCompat;
+import net.kenji.auto_perspective.compat.ShoulderSurfingCompat;
 import net.kenji.auto_perspective.compat.SophistocatedBuildingCompat;
 import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
@@ -21,6 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import org.jetbrains.annotations.NotNull;
+
 
 import javax.annotation.Nullable;
 
@@ -62,24 +64,35 @@ public class PerspectiveManager extends CompatManager{
     }
 
 
-    public static class PerspectiveSwitchData{
-        private final CameraType previous;  // non-null = this mod currently owns the switch
+    public static class PerspectiveSwitchData {
+        private final CameraType previous;
+        private final boolean wasShoulderSurfing;
         private final SwitchCauseType lastSwitchCauseType;
 
-        public PerspectiveSwitchData(@Nullable CameraType camType, @NotNull SwitchCauseType switchType){
-            previous = camType;
-            lastSwitchCauseType = switchType;
-        }
-        public PerspectiveSwitchData from(SwitchCauseType type){
-            return new PerspectiveSwitchData(Minecraft.getInstance().options.getCameraType(), type);
-        }
-        public PerspectiveSwitchData reset(){
-            return new PerspectiveSwitchData(null, SwitchCauseType.NONE);
-        }
-        public static PerspectiveSwitchData init(){
-            return new PerspectiveSwitchData(null, SwitchCauseType.NONE);
+        public PerspectiveSwitchData(@Nullable CameraType camType, boolean wasShoulderSurfing, @NotNull SwitchCauseType switchType) {
+            this.previous = camType;
+            this.wasShoulderSurfing = wasShoulderSurfing;
+            this.lastSwitchCauseType = switchType;
         }
 
+        public PerspectiveSwitchData from(SwitchCauseType type) {
+            boolean ssr = isShoulderSurfingPresent() && ShoulderSurfingCompat.isShoulderSurfing();
+            return new PerspectiveSwitchData(Minecraft.getInstance().options.getCameraType(), ssr, type);
+        }
+
+        public void restore(Minecraft mc) {
+            if (wasShoulderSurfing && isShoulderSurfingPresent()) {
+                ShoulderSurfingCompat.restoreShoulderSurfing();
+            } else {
+                mc.options.setCameraType(previous);
+            }
+        }
+
+        public PerspectiveSwitchData reset() { return init(); }
+
+        public static PerspectiveSwitchData init() {
+            return new PerspectiveSwitchData(null, false, SwitchCauseType.NONE);
+        }
     }
 
     public static void tickPerspectiveManager(ClientTickEvent.Post event) {
@@ -133,7 +146,7 @@ public class PerspectiveManager extends CompatManager{
                 return;
             }
             if (ticksClear >= switchData.lastSwitchCauseType.getExitTicksFromSwitchType()) {
-                mc.options.setCameraType(switchData.previous);
+                switchData.restore(mc);
                 switchData = switchData.reset();
                 switchCooldown = ConfigClient.SWITCH_COOLDOWN_TICKS.get();
             }
@@ -195,6 +208,11 @@ public class PerspectiveManager extends CompatManager{
         if(!(ConfigClient.USE_ATTACK_SWITCH.get()))return false;
         return attackCounter > 0;
     }
+    public static boolean isEpicFightAttacking(){
+        if(!isEpicFightPresent()) return false;
+        if(!(ConfigClient.USE_EPICFIGHT_ATTACK_SWITCH.get()))return false;
+        return EpicFightCompat.getDidAttack();
+    }
     private static SwitchCauseType getObstruction(Minecraft mc, Player player, CameraType cam) {
         if(ConfigClient.DISABLE_AUTO_SWITCH.get())return SwitchCauseType.NONE;
 
@@ -204,9 +222,12 @@ public class PerspectiveManager extends CompatManager{
         boolean isBuildingMode = isBuildingMode(mc);
         boolean isLockingOn = isLockingOn();
         boolean isAttacking = isAttacking();
+        boolean isEpicFightAttacking = isEpicFightAttacking();
         if(isLockingOn)
             return SwitchCauseType.NONE;
         if(isAttacking)
+            return SwitchCauseType.NONE;
+        if(isEpicFightAttacking)
             return SwitchCauseType.NONE;
         if(isMiningBlock)
             return SwitchCauseType.BLOCK_MINED;

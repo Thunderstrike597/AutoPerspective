@@ -96,7 +96,7 @@ dependencies {
     implementation "curse.maven:seramicxs-smooth-f5-1531249:8130969"
     implementation "curse.maven:effortless-building-302113:8515718"
     compileOnly "curse.maven:effortlessbuilding-sophisticated-1414718:9041131"
-
+    implementation "curse.maven:shoulder-surfing-reloaded-243190:9547205"
     // JEI
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
